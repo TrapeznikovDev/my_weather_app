@@ -1,5 +1,6 @@
+import 'package:another_transformer_page_view/another_transformer_page_view.dart';
 import 'package:flutter/material.dart';
-import 'package:transformer_page_view/transformer_page_view.dart';
+
 import 'dart:math' as Math;
 
 import 'package:vector_math/vector_math_64.dart';
@@ -7,16 +8,16 @@ import 'package:vector_math/vector_math_64.dart';
 class AccordionTransformer extends PageTransformer {
   @override
   Widget transform(Widget child, TransformInfo info) {
-    double position = info.position;
-    if (position < 0.0) {
+    double? position = info.position;
+    if (position! < 0.0) {
       return Transform.scale(
-        scale: 1 + position,
+        scale: 1 + position!,
         alignment: Alignment.topRight,
         child: child,
       );
     } else {
       return Transform.scale(
-        scale: 1 - position,
+        scale: 1 - position!,
         alignment: Alignment.bottomLeft,
         child: child,
       );
@@ -27,18 +28,18 @@ class AccordionTransformer extends PageTransformer {
 class ThreeDTransformer extends PageTransformer {
   @override
   Widget transform(Widget child, TransformInfo info) {
-    double position = info.position;
-    double height = info.height;
-    double width = info.width;
-    double pivotX = 0.0;
-    if (position < 0 && position >= -1) {
+    double? position = info.position;
+    double? height = info.height;
+    double? width = info.width;
+    double? pivotX = 0.0;
+    if (position! < 0 && position! >= -1) {
       // left scrolling
       pivotX = width;
     }
     return Transform(
       transform: Matrix4.identity()
         ..rotate(Vector3(0.0, 2.0, 0.0), position * 1.5),
-      origin: Offset(pivotX, height / 2),
+      origin: Offset(pivotX!, height! / 2),
       child: child,
     );
   }
@@ -48,11 +49,11 @@ class ZoomInPageTransformer extends PageTransformer {
   static const double ZOOM_MAX = 0.5;
   @override
   Widget transform(Widget child, TransformInfo info) {
-    double position = info.position;
-    double width = info.width;
-    if (position > 0 && position <= 1) {
+    double? position = info.position;
+    double? width = info.width;
+    if (position! > 0 && position <= 1) {
       return Transform.translate(
-        offset: Offset(-width * position, 0.0),
+        offset: Offset(-width! * position, 0.0),
         child: Transform.scale(
           scale: 1 - position,
           child: child,
@@ -69,21 +70,21 @@ class ZoomOutPageTransformer extends PageTransformer {
 
   @override
   Widget transform(Widget child, TransformInfo info) {
-    double position = info.position;
-    double pageWidth = info.width;
-    double pageHeight = info.height;
+    double? position = info.position;
+    double? pageWidth = info.width;
+    double? pageHeight = info.height;
 
-    if (position < -1) {
+    if (position! < -1) {
       // [-Infinity,-1)
       // This page is way off-screen to the left.
       //view.setAlpha(0);
-    } else if (position <= 1) {
+    } else if (position! <= 1) {
       // [-1,1]
       // Modify the default slide transition to
       // shrink the page as well
       double scaleFactor = Math.max(MIN_SCALE, 1 - position.abs());
-      double vertMargin = pageHeight * (1 - scaleFactor) / 2;
-      double horzMargin = pageWidth * (1 - scaleFactor) / 2;
+      double vertMargin = pageHeight! * (1 - scaleFactor) / 2;
+      double horzMargin = pageWidth! * (1 - scaleFactor) / 2;
       double dx;
       if (position < 0) {
         dx = (horzMargin - vertMargin / 2);
@@ -119,8 +120,8 @@ class DeepthPageTransformer extends PageTransformer {
 
   @override
   Widget transform(Widget child, TransformInfo info) {
-    double position = info.position;
-    if (position <= 0) {
+    double? position = info.position;
+    if (position! <= 0) {
       return Opacity(
         opacity: 1.0,
         child: Transform.translate(
@@ -139,7 +140,7 @@ class DeepthPageTransformer extends PageTransformer {
       return Opacity(
         opacity: 1.0 - position,
         child: Transform.translate(
-          offset: Offset(info.width * -position, 0.0),
+          offset: Offset(info.width! * -position, 0.0),
           child: Transform.scale(
             scale: scaleFactor,
             child: child,
@@ -162,8 +163,8 @@ class ScaleAndFadeTransformer extends PageTransformer {
 
   @override
   Widget transform(Widget item, TransformInfo info) {
-    double position = info.position;
-    double scaleFactor = (1 - position.abs()) * (1 - _scale);
+    double? position = info.position;
+    double scaleFactor = (1 - position!.abs()) * (1 - _scale);
     double fadeFactor = (1 - position.abs()) * (1 - _fade);
     double opacity = _fade + fadeFactor;
     double scale = _scale + scaleFactor;

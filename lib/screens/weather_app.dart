@@ -1,10 +1,11 @@
+import 'package:another_transformer_page_view/another_transformer_page_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:my_weather_app/models/weather_locations.dart';
 import 'package:my_weather_app/widgets/buildin_transform.dart';
 import 'package:my_weather_app/widgets/single_weather.dart';
 import 'package:my_weather_app/widgets/slider_dot.dart';
-import 'package:transformer_page_view/transformer_page_view.dart';
+
 
 class WeatherApp extends StatefulWidget {
   @override
@@ -15,9 +16,9 @@ class _WeatherAppState extends State<WeatherApp> {
   int _currentpage = 0;
   late String bgImg;
 
-  _onPageChanged(int index) {
+  void _onPageChanged(int? index) {
     setState(() {
-      _currentpage = index;
+      _currentpage = index!;
     });
   }
 
@@ -92,6 +93,7 @@ class _WeatherAppState extends State<WeatherApp> {
               scrollDirection: Axis.horizontal,
               transformer: ScaleAndFadeTransformer(),
               viewportFraction: 0.8,
+              // onPageChanged: _onPageChanged,
               onPageChanged: _onPageChanged,
               itemCount: locationList.length,
               itemBuilder: (ctx, i) => SingleWeather(
@@ -104,3 +106,4 @@ class _WeatherAppState extends State<WeatherApp> {
     );
   }
 }
+
